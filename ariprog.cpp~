@@ -1,0 +1,145 @@
+/*
+ID: karthik24
+LANG: C++
+TASK: ariprog
+*/
+
+#include <iostream>
+#include <fstream>
+#include <math.h>
+using namespace std;
+
+ofstream fout ("ariprog.out");
+
+// to check if val is a sum of two perfect squares
+int isGood(int val, int M, bool truthVal)
+{
+	int i, j, val2;
+	
+	/*
+	if(sqrt(val) == (int) sqrt(val)) return true;
+	if(sqrt(val - 1) == (int) sqrt(val - 1)) return true;
+	
+	for(i = 2; i <= M; i++)
+	{
+	    // some optimization
+	    if(i*i >= val)
+	    {
+	        break;
+        }
+	    
+		val2 = val - (i * i);
+		
+		if(sqrt(val2) == (int) sqrt(val2))
+		{
+			if(truthVal)
+			{
+			    cout << val << " " << (i*i + j*j) << " " << (i*i) << " " << (j*j) << endl;
+                return (i*i);
+			} 
+			return 1;
+		}
+	}
+	*/
+	
+	for(i = 0; i <= M; i++)
+	{
+	    for(j = 0; j <= M; j++)
+	    {
+	        if ((i*i + j*j) == val)
+	        {
+	            if(truthVal)
+	            {
+	                cout << val << " " << (i*i + j*j) << " " << (i*i) << " " << (j*j) << endl;
+	                return (i*i);
+	            }
+	            return 1;
+	        }
+        }
+    }
+	return 0;
+}
+
+int main()
+{
+	
+	ifstream fin ("ariprog.in");
+	//ofstream fout("ariprog.out");
+
+	int N, M, i, j, a, d, ele, ele2, index, count, temp;
+	bool found, stop, stop2, stop3, stop4;
+	int truth;
+	fin >> N >> M;
+	count = 0;
+	
+	for(d = 1; d <= 2*M*M; d++)
+	{
+	    stop4 = false;
+		for(i = 0; i <= M; i++)
+		{
+		    stop3 = false;
+			for(j = 0; j <= i; j++)
+		    {
+		        stop2 = false;
+		        a = i*i + j*j;
+		        //fout << a << " " << d; 
+				stop = false;
+				for(index = 0; index < N; index++)
+				{
+					// ith element of the arith. prog.
+					ele = a + index * d;
+					// check if the ith element exceeded the limit
+					if(ele > 2 * M * M)
+					{
+					    //fout << " limit exceeded" << endl;
+					    stop = true;
+						break;
+					}
+					truth = isGood(ele, M, false);
+					if(truth == 0)
+					{
+					    //fout << " this element gone wrong: " << ele << endl;
+						stop = true;
+						break;
+					}
+				}
+				if(!stop)
+				{
+					//cout << a << " " << d << "true" << endl;
+					fout << a << " " << d << endl;
+					count++;
+					if(count >= 10000)
+					{
+					    break;
+					    stop2 = true;
+					    stop3 = true;
+					    stop4 = true;
+				    }
+					/*for(index = 0; index < N; index++)
+					{
+					    temp = isGood(a + index * d, M, true);
+                        fout << "   " << a + index * d << " " << temp << " " << a + index * d - temp << endl;
+					}*/
+				}
+				if(stop2)
+				{
+				    break;
+			    }
+			}
+			if(stop3)
+			{
+                break;
+            }
+		}
+		if(stop4)
+		{
+		    break;
+	    }
+	}
+	if(count == 0)
+	{
+	    fout << "NONE" << endl;
+    }
+
+	return 0;
+}
